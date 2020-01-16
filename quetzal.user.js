@@ -14,7 +14,9 @@
 
     // Define CSS
     let css = `
-
+.layout-post__main {
+    margin: 0 auto;
+}
 `;
 
     // Apply CSS into <head>
