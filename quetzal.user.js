@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Quetzal
 // @namespace    https://github.com/usagiga/Quetzal
-// @version      1.1
+// @version      1.0
 // @description  Custom CSS for made esa.io pretty.
 // @author       Usagigawara
 // @match        *.esa.io/posts/*
