@@ -12,9 +12,9 @@
 (function() {
     'use strict';
 
-    let applyCSS = () => {
+    const applyCSS = () => {
        // Define CSS
-       let css = `
+       const css = `
 .layout-post__main {
     margin: 0 auto;
 }
@@ -22,51 +22,82 @@
 .layout-post__aside-content {
     margin: 0 auto;
 }
+
+.link-with-icon {
+    display: initial;
+}
+
+.layout-post__toc {
+    display: none;
+}
 `;
 
         // Apply CSS into <head>
-        let headElem = document.querySelector("head");
+        const headElem = document.querySelector("head");
         let styleElem = document.createElement("style");
         styleElem.type = "text/css";
         styleElem.innerText = css;
         headElem.insertAdjacentElement("afterend", styleElem);
     };
 
-    // Event handlers
-    let provisionToCLoaded = (container, elem) => {
-        let postContElem = document.querySelector(".layout-post__main");
-        let tocContElem = container;
-        let tocElem = elem;
-
-        // Move ToC to top of the article
-        postContElem.insertAdjacentElement("afterbegin", tocElem);
-        tocContElem.remove();
+    // Helpers
+    const subscribeUpdatingElem = (target, handler) => {
+        const observer = new MutationObserver(handler);
+        observer.observe(target, { childList: true });
     };
-    let provisionDocStart = () => {
-        applyCSS();
-    };
-    let provisionDocIdle = ev => {
-        // Subscribe events (after DOMContentLoaded)
-
-        // Provision when loaded ToC
-        let tocObsCallback = (mrs, ob) => {
+    const subscribeInsertingElem = (targetClass, targetParent, handler) => {
+        const observerCallback = (mrs, ob) => {
             mrs.forEach(mr => {
                 if (mr.type !== "childList") return;
                 mr.addedNodes.forEach(v => {
                     if (typeof(v.classList) === "undefined") return;
-                    if (v.classList.contains("toc-box")) {
-                        // Disconnect Mutation
-                        ob.disconnect();
+                    if (!v.classList.contains(targetClass)) return;
 
-                        provisionToCLoaded(mr.target, v);
-                        return;
-                    }
+                    // Disconnect Mutation
+                    ob.disconnect();
+
+                    handler(mr.target, v);
+                    return;
                 });
             });
-        }
-        let tocContElem = document.querySelector(".layout-post__toc");
-        let tocObserver = new MutationObserver(tocObsCallback);
-        tocObserver.observe(tocContElem, { childList: true });
+        };
+
+        subscribeUpdatingElem(targetParent, observerCallback);
+    };
+
+    // Event handlers
+    const provisionToCLoaded = (container, elem) => {
+        const postContElem = document.querySelector(".layout-post__main");
+        const tocElem = elem;
+
+        // Move ToC to top of the article
+        postContElem.insertAdjacentElement("afterbegin", tocElem);
+    };
+    const provisionToCAccordionLoaded = (container, elem) => {
+        const postContElem = document.querySelector(".layout-post__main");
+        const accElem = elem;
+        const accCaret = accElem.querySelector(".fa-caret-right");
+        const tocElem = document.querySelector(".toc-box");
+        const tocStyle = tocElem.getAttribute("style");
+
+        // Move the accordion to top of the article
+        postContElem.insertAdjacentElement("afterbegin", accElem);
+
+        // Close Accordion
+        if (tocStyle !== null) return;
+        tocElem.setAttribute("style", "display: none;");
+        accCaret.classList.remove("fa-rotate-90");
+    };
+    const provisionDocStart = () => {
+        applyCSS();
+    };
+    const provisionDocIdle = ev => {
+        // Subscribe events (after DOMContentLoaded)
+
+        // Provision when loaded ToC
+        const tocContElem = document.querySelector(".layout-post__toc");
+        subscribeInsertingElem("toc-box", tocContElem, provisionToCLoaded);
+        subscribeInsertingElem("link-with-icon", tocContElem, provisionToCAccordionLoaded);
     };
 
     // Subscribe events
