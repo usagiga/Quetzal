@@ -94,6 +94,11 @@
 .layout-home__left ul li > a {
     border-radius: 0 10px 10px 0;
 }
+
+/* Centering the article */
+.home__main-column {
+    margin: 0 auto;
+}
 `;
 
             // Apply CSS into <head>
@@ -281,6 +286,32 @@
         // Subscribe events
         provisionDocStart(); // Provision when document-start
     };
+    let injectTags = () => {
+        const applyCSS = () => {
+            // Define CSS
+            const css = `
+/* Centering contents */
+.layout-wrapper {
+    margin: 0 auto;
+}
+`;
+
+            // Apply CSS into <head>
+            const headElem = document.querySelector("head");
+            let styleElem = document.createElement("style");
+            styleElem.type = "text/css";
+            styleElem.innerText = css;
+            headElem.insertAdjacentElement("afterend", styleElem);
+        };
+
+        // Event handlers
+        const provisionDocStart = () => {
+            applyCSS();
+        };
+
+        // Subscribe events
+        provisionDocStart(); // Provision when document-start
+    };
 
     // Applying injection
     let pageUrl = new URL(window.location.href);
@@ -290,6 +321,7 @@
     injectAlways();
     if (path === "/") injectHome();
     if (path === "/posts") injectSearch();
+    if (path === "/tags") injectTags();
     if (
         path.indexOf("/team") !== -1 ||
         path.indexOf("/members") !== -1 ||
