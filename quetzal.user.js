@@ -12,9 +12,41 @@
 (function() {
     'use strict';
 
+    // Helpers
+    const subscribeUpdatingElem = (target, handler) => {
+            const observer = new MutationObserver(handler);
+            observer.observe(target, { childList: true });
+        };
+    const subscribeInsertingElem = (targetClass, targetParent, handler) => {
+            const observerCallback = (mrs, ob) => {
+                mrs.forEach(mr => {
+                    if (mr.type !== "childList") return;
+                    mr.addedNodes.forEach(v => {
+                        if (typeof(v.classList) === "undefined") return;
+                        if (!v.classList.contains(targetClass)) return;
+
+                        // Disconnect Mutation
+                        ob.disconnect();
+
+                        handler(mr.target, v);
+                        return;
+                    });
+                });
+            };
+
+            subscribeUpdatingElem(targetParent, observerCallback);
+        };
+    const applyCSS = (css) => {
+        const headElem = document.querySelector("head");
+        let styleElem = document.createElement("style");
+        styleElem.type = "text/css";
+        styleElem.innerText = css;
+        headElem.insertAdjacentElement("afterend", styleElem);
+    };
+
     // Injections
     let injectAlways = () => {
-        const applyCSS = () => {
+        const applyCSSHandler = () => {
             // Define CSS
             const css = `
 /* White header, search box */
@@ -24,24 +56,19 @@
 }
 `;
 
-            // Apply CSS into <head>
-            const headElem = document.querySelector("head");
-            let styleElem = document.createElement("style");
-            styleElem.type = "text/css";
-            styleElem.innerText = css;
-            headElem.insertAdjacentElement("afterend", styleElem);
+            applyCSS(css);
         };
 
         // Event handlers
         const provisionDocStart = () => {
-            applyCSS();
+            applyCSSHandler();
         };
 
         // Subscribe events
         provisionDocStart(); // Provision when document-start
     };
     let injectHome = () => {
-        const applyCSS = () => {
+        const applyCSSHandler = () => {
             // Define CSS
             const css = `
 /* Disabling scroll-bar */
@@ -101,24 +128,19 @@
 }
 `;
 
-            // Apply CSS into <head>
-            const headElem = document.querySelector("head");
-            let styleElem = document.createElement("style");
-            styleElem.type = "text/css";
-            styleElem.innerText = css;
-            headElem.insertAdjacentElement("afterend", styleElem);
+            applyCSS(css);
         };
 
         // Event handlers
         const provisionDocStart = () => {
-            applyCSS();
+            applyCSSHandler();
         };
 
         // Subscribe events
         provisionDocStart(); // Provision when document-start
     };
     let injectArticle = () => {
-        const applyCSS = () => {
+        const applyCSSHandler = () => {
             // Define CSS
             const css = `
 /* Centering Article */
@@ -148,38 +170,8 @@
 }
 `;
 
-            // Apply CSS into <head>
-            const headElem = document.querySelector("head");
-            let styleElem = document.createElement("style");
-            styleElem.type = "text/css";
-            styleElem.innerText = css;
-            headElem.insertAdjacentElement("afterend", styleElem);
-        };
-
-        // Helpers
-        const subscribeUpdatingElem = (target, handler) => {
-            const observer = new MutationObserver(handler);
-            observer.observe(target, { childList: true });
-        };
-        const subscribeInsertingElem = (targetClass, targetParent, handler) => {
-            const observerCallback = (mrs, ob) => {
-                mrs.forEach(mr => {
-                    if (mr.type !== "childList") return;
-                    mr.addedNodes.forEach(v => {
-                        if (typeof(v.classList) === "undefined") return;
-                        if (!v.classList.contains(targetClass)) return;
-
-                        // Disconnect Mutation
-                        ob.disconnect();
-
-                        handler(mr.target, v);
-                        return;
-                    });
-                });
-            };
-
-            subscribeUpdatingElem(targetParent, observerCallback);
-        };
+            applyCSS(css);
+        }; 
 
         // Event handlers
         const provisionToCLoaded = (container, elem) => {
@@ -205,7 +197,7 @@
             accCaret.classList.remove("fa-rotate-90");
         };
         const provisionDocStart = () => {
-            applyCSS();
+            applyCSSHandler();
         };
         const provisionDocIdle = ev => {
             // Subscribe events (after DOMContentLoaded)
@@ -221,7 +213,7 @@
         window.addEventListener("DOMContentLoaded", provisionDocIdle); // Provision when document-idle
     };
     let injectSearch = () => {
-        const applyCSS = () => {
+        const applyCSSHandler = () => {
             // Define CSS
             const css = `
 /* Centering Search */
@@ -244,24 +236,19 @@
 }
 `;
 
-            // Apply CSS into <head>
-            const headElem = document.querySelector("head");
-            let styleElem = document.createElement("style");
-            styleElem.type = "text/css";
-            styleElem.innerText = css;
-            headElem.insertAdjacentElement("afterend", styleElem);
+            applyCSS(css);
         };
 
         // Event handlers
         const provisionDocStart = () => {
-            applyCSS();
+            applyCSSHandler();
         };
 
         // Subscribe events
         provisionDocStart(); // Provision when document-start
     };
     let injectSettings = () => {
-        const applyCSS = () => {
+        const applyCSSHandler = () => {
             // Define CSS
             const css = `
 /* Centering contents */
@@ -270,24 +257,19 @@
 }
 `;
 
-            // Apply CSS into <head>
-            const headElem = document.querySelector("head");
-            let styleElem = document.createElement("style");
-            styleElem.type = "text/css";
-            styleElem.innerText = css;
-            headElem.insertAdjacentElement("afterend", styleElem);
+            applyCSS(css);
         };
 
         // Event handlers
         const provisionDocStart = () => {
-            applyCSS();
+            applyCSSHandler();
         };
 
         // Subscribe events
         provisionDocStart(); // Provision when document-start
     };
     let injectTags = () => {
-        const applyCSS = () => {
+        const applyCSSHandler = () => {
             // Define CSS
             const css = `
 /* Centering contents */
@@ -296,17 +278,12 @@
 }
 `;
 
-            // Apply CSS into <head>
-            const headElem = document.querySelector("head");
-            let styleElem = document.createElement("style");
-            styleElem.type = "text/css";
-            styleElem.innerText = css;
-            headElem.insertAdjacentElement("afterend", styleElem);
+            applyCSS(css);
         };
 
         // Event handlers
         const provisionDocStart = () => {
-            applyCSS();
+            applyCSSHandler();
         };
 
         // Subscribe events
