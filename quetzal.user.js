@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Quetzal
 // @namespace    https://github.com/usagiga/Quetzal
-// @version      1.0
+// @version      beta1.1
 // @description  Custom CSS for made esa.io pretty.
 // @author       Usagigawara
 // @match        *.esa.io/posts/*
@@ -15,6 +15,7 @@
     const applyCSS = () => {
        // Define CSS
        const css = `
+/* Centering Article */
 .layout-post__main {
     margin: 0 auto;
 }
@@ -23,12 +24,21 @@
     margin: 0 auto;
 }
 
+/* Always enableing accordion menu */
 .link-with-icon {
     display: initial;
 }
 
+/* Disabling floating ToC */
 .layout-post__toc {
     display: none;
+}
+
+/* Disabling border */
+.post-header,
+.layout-post__aside,
+.viewer-action__item {
+    border: 0;
 }
 `;
 
