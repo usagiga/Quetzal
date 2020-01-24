@@ -17,8 +17,9 @@
         const applyCSS = () => {
             // Define CSS
             const css = `
-/* White header */
-.navbar-sub {
+/* White header, search box */
+.navbar-sub,
+.form-control {
     background-color: inherit;
 }
 `;
