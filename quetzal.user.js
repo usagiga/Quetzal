@@ -293,7 +293,6 @@
     // Applying injection
     let pageUrl = new URL(window.location.href);
     let path = pageUrl.pathname;
-    console.log(path);
 
     injectAlways();
     if (path === "/") injectHome();
