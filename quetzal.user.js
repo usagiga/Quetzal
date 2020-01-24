@@ -6,7 +6,7 @@
 // @author       Usagigawara
 // @match        *.esa.io/*
 // @grant        none
-// @run-at       document-start
+// @run-at       document-body
 // ==/UserScript==
 
 (function() {
