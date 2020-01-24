@@ -2,6 +2,18 @@
 Custom CSS for made esa.io pretty.
 
 
+## Features
+
+- Centering the contents in specific view (Home / Search / Setting / Tags)
+- Accordion style ToC is always available
+- Simplified views
+    - White header
+    - White search box
+    - White category menu (Home view)
+    - Some boader is disabled
+    - Remove describing of search option
+
+
 ## How to Install
 
 1. Install Tampermonkey to your browser.
