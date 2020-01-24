@@ -10,7 +10,7 @@ Custom CSS for made esa.io pretty.
     - White header
     - White search box
     - White category menu (Home view)
-    - Some boader is disabled
+    - Some boaders are disabled
     - Remove describing of search option
 
 
