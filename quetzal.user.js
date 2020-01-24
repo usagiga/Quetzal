@@ -254,6 +254,32 @@
         // Subscribe events
         provisionDocStart(); // Provision when document-start
     };
+    let injectSettings = () => {
+        const applyCSS = () => {
+            // Define CSS
+            const css = `
+/* Centering contents */
+.layout-settings__content {
+    margin: 0 auto;
+}
+`;
+
+            // Apply CSS into <head>
+            const headElem = document.querySelector("head");
+            let styleElem = document.createElement("style");
+            styleElem.type = "text/css";
+            styleElem.innerText = css;
+            headElem.insertAdjacentElement("afterend", styleElem);
+        };
+
+        // Event handlers
+        const provisionDocStart = () => {
+            applyCSS();
+        };
+
+        // Subscribe events
+        provisionDocStart(); // Provision when document-start
+    };
 
     // Applying injection
     let pageUrl = new URL(window.location.href);
@@ -263,5 +289,10 @@
     injectAlways();
     if (path === "/") injectHome();
     if (path === "/posts") injectSearch();
+    if (
+        path.indexOf("/team") !== -1 ||
+        path.indexOf("/members") !== -1 ||
+        path.indexOf("/user") !== -1
+    ) injectSettings();
     if (path.indexOf("/posts/") !== -1) injectArticle();
 })();
